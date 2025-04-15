@@ -1,12 +1,15 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
 import OpenAI from "openai";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // All varaiables needed to connect to Astra DB and OpenAI API
-const ASTRA_DB_NAMESPACE = import.meta.env.ASTRA_DB_NAMESPACE;
-const ASTRA_DB_COLLECTION = import.meta.env.ASTRA_DB_COLLECTION;
-const ASTRA_DB_ENDPOINT = import.meta.env.ASTRA_DB_ENDPOINT;
-const ASTRA_DB_APPLICATION_TOKEN = import.meta.env.ASTRA_DB_APPLICATION_TOKEN;
-const OPENAI_API_KEY = import.meta.env.OPENAI_API_KEY;
+const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
+const ASTRA_DB_COLLECTION = process.env.ASTRA_DB_COLLECTION;
+const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
+const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 // Create an instance of the OpenAI class with the API key
 const openai = new OpenAI({
@@ -16,9 +19,7 @@ const openai = new OpenAI({
 
 // Connect to Astra DB then the database
 const astraClient = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
-const db = astraClient.db(ASTRA_DB_ENDPOINT, {
-    namespace: ASTRA_DB_NAMESPACE,
-});
+const db = astraClient.db(ASTRA_DB_ENDPOINT);
 
 // Creates a template of the message sent to OpenAI API with context from the database and the users question
 const CreateMessageTemplate = async (userMessage) => {

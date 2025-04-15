@@ -1,5 +1,5 @@
-import bodyParser from "body-parser";
 import express from "express";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import route from "./routes/routes.js";
 import { createRequire } from "module";
@@ -12,7 +12,7 @@ dotenv.config();
 
 // Setting up express app and middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
