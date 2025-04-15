@@ -1,0 +1,20 @@
+{
+    "name": "rag_chat_bot_api",
+    "version": "1.0.0",
+    "description": "Api for my rag chat bot it will handle all the OpenAI and AstraDB API calls",
+    "homepage": "https://github.com/Tarif24/RAG_Chat_Bot_API#readme",
+    "bugs": {
+        "url": "https://github.com/Tarif24/RAG_Chat_Bot_API/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Tarif24/RAG_Chat_Bot_API.git"
+    },
+    "license": "ISC",
+    "author": "Tarif Mohammad",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}
