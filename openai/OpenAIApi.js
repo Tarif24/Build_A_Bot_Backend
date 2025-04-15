@@ -5,7 +5,6 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // All varaiables needed to connect to Astra DB and OpenAI API
-const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
 const ASTRA_DB_COLLECTION = process.env.ASTRA_DB_COLLECTION;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
 const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
