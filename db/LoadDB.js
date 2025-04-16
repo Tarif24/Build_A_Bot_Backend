@@ -22,7 +22,7 @@ const openai = new OpenAI({
 
 // This is a list of URLs that will be scraped to load the data into the database
 const ragData = [
-    "https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
+    //"https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
 ];
 
 // Connect to Astra DB then the database
@@ -45,7 +45,6 @@ const createCollection = async (SimilarityMetric = "dot_product") => {
     });
 };
 
-// Goes through the list of URLs and scrapes the data from each page
 const loadSampleData = async () => {
     const collection = await db.collection(ASTRA_DB_COLLECTION);
 
@@ -73,7 +72,6 @@ const loadSampleData = async () => {
     console.log("Data loaded successfully!");
 };
 
-// Function to scrape the page and return the text content using Puppeteer
 const scrapePage = async (url) => {
     const loader = new PuppeteerWebBaseLoader(url, {
         launchOptions: {

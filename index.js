@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import route from "./routes/routes.js";
 import { createRequire } from "module";

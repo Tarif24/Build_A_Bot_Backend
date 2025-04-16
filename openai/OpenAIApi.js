@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // All varaiables needed to connect to Astra DB and OpenAI API
+const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
 const ASTRA_DB_COLLECTION = process.env.ASTRA_DB_COLLECTION;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
 const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
@@ -18,7 +19,9 @@ const openai = new OpenAI({
 
 // Connect to Astra DB then the database
 const astraClient = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
-const db = astraClient.db(ASTRA_DB_ENDPOINT);
+const db = astraClient.db(ASTRA_DB_ENDPOINT, {
+    namespace: ASTRA_DB_NAMESPACE,
+});
 
 // Creates a template of the message sent to OpenAI API with context from the database and the users question
 const CreateMessageTemplate = async (userMessage) => {
