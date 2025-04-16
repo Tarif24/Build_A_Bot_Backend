@@ -22,7 +22,7 @@ const openai = new OpenAI({
 
 // This is a list of URLs that will be scraped to load the data into the database
 const ragData = [
-    //"https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
+    "https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
 ];
 
 // Connect to Astra DB then the database
@@ -38,8 +38,21 @@ const splitter = new RecursiveCharacterTextSplitter({
 });
 
 // Creating a collection with in astra DB with in my namespace
-const createCollection = async (SimilarityMetric = "dot_product") => {
+const createCollection = async (
+    isNew = true,
+    SimilarityMetric = "dot_product"
+) => {
     // Create a collection in the database
+    if (await db.collection(ASTRA_DB_COLLECTION)) {
+        if (!isNew) {
+            console.log("Collection already exists, skipping creation.");
+            return;
+        } else {
+            console.log("Deleting EXISTING COLLECTION.");
+            await db.dropCollection(ASTRA_DB_COLLECTION);
+            console.log("COLLECTION DELETED.");
+        }
+    }
     await db.createCollection(ASTRA_DB_COLLECTION, {
         vector: { dimension: 1536, metric: SimilarityMetric },
     });
@@ -49,8 +62,10 @@ const loadSampleData = async () => {
     const collection = await db.collection(ASTRA_DB_COLLECTION);
 
     for await (const url of ragData) {
+        console.log("SCRAPING URL: ", url);
         const content = await scrapePage(url);
         const chunks = await splitter.splitText(content);
+        console.log("SCRAPING URL: ", url, " DONE");
         for await (const chunk of chunks) {
             const embedding = await openai.embeddings.create({
                 model: "text-embedding-3-small",
@@ -67,9 +82,10 @@ const loadSampleData = async () => {
 
             console.log("Inserted:", res);
         }
+        console.log("ALL DATA LOADED TO DB FOR URL: ", url);
     }
 
-    console.log("Data loaded successfully!");
+    console.log("ALL DATA LOADED TO DB SUCCESSFULLY");
 };
 
 const scrapePage = async (url) => {
