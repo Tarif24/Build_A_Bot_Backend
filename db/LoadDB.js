@@ -21,9 +21,9 @@ const openai = new OpenAI({
 });
 
 // This is a list of URLs that will be scraped to load the data into the database
-const ragData = [
-    "https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
-];
+// const ragData = [
+//     "https://en.wikipedia.org/wiki/2024_Formula_One_World_Championship",
+// ];
 
 // Connect to Astra DB then the database
 const astraClient = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
@@ -39,27 +39,21 @@ const splitter = new RecursiveCharacterTextSplitter({
 
 // Creating a collection with in astra DB with in my namespace
 const createCollection = async (
-    isNew = true,
+    collectionName,
     SimilarityMetric = "dot_product"
 ) => {
+    const collectionList = await db.listCollections();
+
     // Create a collection in the database
-    if (await db.collection(ASTRA_DB_COLLECTION)) {
-        if (!isNew) {
-            console.log("Collection already exists, skipping creation.");
-            return;
-        } else {
-            console.log("Deleting EXISTING COLLECTION.");
-            await db.dropCollection(ASTRA_DB_COLLECTION);
-            console.log("COLLECTION DELETED.");
-        }
+    if (!collectionList.includes(collectionName)) {
+        await db.createCollection(collectionName, {
+            vector: { dimension: 1536, metric: SimilarityMetric },
+        });
     }
-    await db.createCollection(ASTRA_DB_COLLECTION, {
-        vector: { dimension: 1536, metric: SimilarityMetric },
-    });
 };
 
-const loadSampleData = async () => {
-    const collection = await db.collection(ASTRA_DB_COLLECTION);
+const loadSampleData = async (collectionName, ragData) => {
+    const collection = await db.collection(collectionName);
 
     for await (const url of ragData) {
         console.log("SCRAPING URL: ", url);
@@ -106,4 +100,23 @@ const scrapePage = async (url) => {
     return (await loader.scrape())?.replace(/<[^>]*>?/gm, "");
 };
 
-createCollection().then(() => loadSampleData());
+export const newCollection = async (collectionName, ragData) => {
+    try {
+        await createCollection(collectionName);
+        await loadSampleData(collectionName, ragData);
+    } catch (error) {
+        console.error("Error creating collection or loading data:", error);
+    }
+};
+
+export const addDataToCollection = async (collectionName, ragData) => {
+    try {
+        if (!(await db.collection(collectionName))) {
+            console.error("Collection does not exist:", collectionName);
+            return;
+        }
+        await loadSampleData(collectionName, ragData);
+    } catch (error) {
+        console.error("Error loading data:", error);
+    }
+};
