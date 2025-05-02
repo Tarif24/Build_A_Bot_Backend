@@ -1,7 +1,15 @@
 import express from "express";
-import { query, createRAGBot } from "../controller/controller.js";
+import {
+    query,
+    createRAGBot,
+    getAllRAGBotCollectionsByName,
+    getAllRAGBotsInfo,
+} from "../controller/controller.js";
 
 const route = express.Router();
+
+route.get("/getAllRAGBotCollectionsByName", getAllRAGBotCollectionsByName);
+route.get("/getAllRAGBotsInfo", getAllRAGBotsInfo);
 
 route.post("/query", query);
 route.post("/createragbot", createRAGBot);

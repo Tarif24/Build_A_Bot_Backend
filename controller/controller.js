@@ -1,6 +1,9 @@
 import OpenAIApiCall from "../openai/OpenAIApi.js";
 import { createNewRAGBot } from "../db/MainDBController.js";
-import { getAllRagBotsCollectionsByName } from "../db/RAGDBListController.js";
+import {
+    getAllRagBotsCollectionsByName,
+    getAllRagBotsInfo,
+} from "../db/RAGDBListController.js";
 
 let chatHistory = [];
 
@@ -44,6 +47,25 @@ export const createRAGBot = async (req, res) => {
         await createNewRAGBot(ragbot);
 
         res.status(200).json({ message: "RAG Bot created successfully." });
+    } catch (error) {
+        res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+    }
+};
+
+export const getAllRAGBotCollectionsByName = async (req, res) => {
+    try {
+        const allRagBotsCollectionsName =
+            await getAllRagBotsCollectionsByName();
+        res.status(200).json(allRagBotsCollectionsName);
+    } catch (error) {
+        res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+    }
+};
+
+export const getAllRAGBotsInfo = async (req, res) => {
+    try {
+        const allRAGBotsInfo = await getAllRagBotsInfo();
+        res.status(200).json(getAllRAGBotsInfo);
     } catch (error) {
         res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }

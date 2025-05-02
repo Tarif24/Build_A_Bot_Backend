@@ -20,7 +20,7 @@ export const createCollection = async (ragbot) => {
     await collection.insertOne(ragbot);
 };
 
-export const getAllRagBots = async () => {
+export const getAllRagBotsInfo = async () => {
     const allRagBots = collection.find({}).toArray();
     return allRagBots;
 };
