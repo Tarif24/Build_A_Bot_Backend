@@ -1,5 +1,8 @@
 import OpenAIApiCall from "../openai/OpenAIApi.js";
-import { createNewRAGBot } from "../db/MainDBController.js";
+import {
+    createNewRAGBot,
+    deleteExistingRagBot,
+} from "../db/MainDBController.js";
 import {
     getAllRagBotsCollectionsByName,
     getAllRagBotsInfo,
@@ -66,6 +69,21 @@ export const getAllRAGBotsInfo = async (req, res) => {
     try {
         const allRAGBotsInfo = await getAllRagBotsInfo();
         res.status(200).json(getAllRAGBotsInfo);
+    } catch (error) {
+        res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+    }
+};
+
+export const deleteRAGBot = async (req, res) => {
+    try {
+        const collectionName = req.body.collectionName;
+        if (!collectionName || collectionName.trim() === "") {
+            return res.status(400).json({
+                message: "Please include a valid collection name.",
+            });
+        }
+        await deleteExistingRagBot(collectionName);
+        res.status(200).json({ message: "RAG Bot deleted successfully." });
     } catch (error) {
         res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }

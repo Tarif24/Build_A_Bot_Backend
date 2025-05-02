@@ -120,3 +120,11 @@ export const addDataToCollection = async (collectionName, ragData) => {
         console.error("Error loading data:", error);
     }
 };
+
+export const deleteRagBotCollection = async (collectionName) => {
+    try {
+        const deletedCollectionRes = await db.dropCollection(collectionName);
+    } catch (error) {
+        console.error("Error deleting collection:", error);
+    }
+};

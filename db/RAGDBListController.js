@@ -32,3 +32,9 @@ export const getAllRagBotsCollectionsByName = async () => {
     });
     return allRagBotsCollectionsName;
 };
+
+export const deleteRagBot = async (collectionName) => {
+    const deleteRagBotRes = await collection.deleteOne({
+        collectionName: collectionName,
+    });
+};
