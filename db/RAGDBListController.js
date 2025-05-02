@@ -1,6 +1,5 @@
 import { DataAPIClient } from "@datastax/astra-db-ts";
 import dotenv from "dotenv";
-import { newCollection } from "./LoadDB.js";
 
 dotenv.config();
 
@@ -19,6 +18,17 @@ const collection = db.collection(ASTRA_DB_COLLECTION);
 
 export const createCollection = async (ragbot) => {
     await collection.insertOne(ragbot);
+};
 
-    await newCollection(ragbot.collectionName, ragbot.links);
+export const getAllRagBots = async () => {
+    const allRagBots = collection.find({}).toArray();
+    return allRagBots;
+};
+
+export const getAllRagBotsCollectionsByName = async () => {
+    const allRagBots = collection.find({}).toArray();
+    const allRagBotsCollectionsName = allRagBots.map((ragbot) => {
+        return ragbot.collectionName;
+    });
+    return allRagBotsCollectionsName;
 };

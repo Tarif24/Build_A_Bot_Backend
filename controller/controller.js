@@ -1,5 +1,6 @@
 import OpenAIApiCall from "../openai/OpenAIApi.js";
-import { createCollection } from "../db/CreateNewCollection.js";
+import { createNewRAGBot } from "../db/MainDBController.js";
+import { getAllRagBotsCollectionsByName } from "../db/RAGDBListController.js";
 
 let chatHistory = [];
 
@@ -40,7 +41,7 @@ export const createRAGBot = async (req, res) => {
                 message: "Please include a valid ragbot.",
             });
         }
-        await createCollection(ragbot);
+        await createNewRAGBot(ragbot);
 
         res.status(200).json({ message: "RAG Bot created successfully." });
     } catch (error) {
