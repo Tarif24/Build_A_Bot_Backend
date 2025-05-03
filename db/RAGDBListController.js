@@ -21,12 +21,12 @@ export const createCollection = async (ragbot) => {
 };
 
 export const getAllRagBotsInfo = async () => {
-    const allRagBots = collection.find({}).toArray();
+    const allRagBots = await collection.find({}).toArray();
     return allRagBots;
 };
 
 export const getAllRagBotsCollectionsByName = async () => {
-    const allRagBots = collection.find({}).toArray();
+    const allRagBots = await collection.find({}).toArray();
     const allRagBotsCollectionsName = allRagBots.map((ragbot) => {
         return ragbot.collectionName;
     });

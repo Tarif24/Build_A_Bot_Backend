@@ -68,7 +68,7 @@ export const getAllRAGBotCollectionsByName = async (req, res) => {
 export const getAllRAGBotsInfo = async (req, res) => {
     try {
         const allRAGBotsInfo = await getAllRagBotsInfo();
-        res.status(200).json(getAllRAGBotsInfo);
+        res.status(200).json(allRAGBotsInfo);
     } catch (error) {
         res.status(500).json({ message: "INTERNAL SERVER ERROR" });
     }
