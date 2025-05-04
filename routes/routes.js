@@ -1,6 +1,7 @@
 import express from "express";
 import {
     query,
+    queryNoRAG,
     resetChatHistory,
     createRAGBot,
     getAllRAGBotCollectionsByName,
@@ -16,6 +17,7 @@ route.get("/getAllRAGBotsInfo", getAllRAGBotsInfo);
 route.get("/resetChatHistory", resetChatHistory);
 
 route.post("/query", query);
+route.post("/queryNoRAG", queryNoRAG);
 route.post("/createRAGBot", createRAGBot);
 
 route.put("/addDataToRAGBot", addDataToRAGBot);

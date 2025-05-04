@@ -1,4 +1,4 @@
-import OpenAIApiCall from "../openai/OpenAIApi.js";
+import OpenAIApiCallRAG, { OpenAIApiCallNoRAG } from "../openai/OpenAIApi.js";
 import {
     createRagBot,
     deleteExistingRagBot,
@@ -11,6 +11,7 @@ import {
 } from "../db/RAGDBListController.js";
 
 let chatHistory = [];
+let chatHistoryNoRAG = [];
 
 export const query = async (req, res) => {
     try {
@@ -30,7 +31,7 @@ export const query = async (req, res) => {
 
         const ragbot = await getRagBotInfoByCollectionName(collectionName);
 
-        const response = await OpenAIApiCall(chatHistory, ragbot);
+        const response = await OpenAIApiCallRAG(chatHistory, ragbot);
 
         chatHistory.push(response);
 
@@ -40,9 +41,36 @@ export const query = async (req, res) => {
     }
 };
 
+export const queryNoRAG = async (req, res) => {
+    try {
+        if (!req.body.query || req.body.query.trim() === "") {
+            return res
+                .status(400)
+                .json({ message: "Please include a valid query." });
+        }
+
+        chatHistoryNoRAG.push({
+            role: "user",
+            content: req.body.query.toString(),
+        });
+
+        const response = await OpenAIApiCallNoRAG(chatHistoryNoRAG);
+
+        chatHistoryNoRAG.push(response);
+
+        res.status(200).json({ message: response.content });
+    } catch (error) {
+        res.status(500).json({
+            message: "INTERNAL SERVER ERROR",
+            error: error,
+        });
+    }
+};
+
 export const resetChatHistory = async (req, res) => {
     try {
         chatHistory = [];
+        chatHistoryNoRAG = [];
         res.status(200).json({ message: "Chat history reset successfully." });
     } catch (error) {
         res.status(500).json({ message: "INTERNAL SERVER ERROR" });

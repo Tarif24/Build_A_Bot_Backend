@@ -65,7 +65,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
             If the context doesn't include the information you need to answer then you should ${ragbot.unknown}. 
             
             Your behavior is ${ragbot.behavior}. 
-            
+
             Format responses using markdown where applicable and don't return images.
             
             ----------------------------
@@ -84,7 +84,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
 };
 
 // Function is called with the chat history and returns the response from OpenAI
-const OpenAIApiCall = async (chatHistory, ragbot) => {
+const OpenAIApiCallRAG = async (chatHistory, ragbot) => {
     const lastMessage = chatHistory[chatHistory.length - 1].content;
 
     const messageTemplate = await CreateMessageTemplate(lastMessage, ragbot);
@@ -98,4 +98,16 @@ const OpenAIApiCall = async (chatHistory, ragbot) => {
     return response.choices[0].message;
 };
 
-export default OpenAIApiCall;
+export const OpenAIApiCallNoRAG = async (chatHistory) => {
+    const lastMessage = chatHistory[chatHistory.length - 1];
+
+    const response = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [lastMessage, ...chatHistory],
+        n: 1,
+    });
+
+    return response.choices[0].message;
+};
+
+export default OpenAIApiCallRAG;
