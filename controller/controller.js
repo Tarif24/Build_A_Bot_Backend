@@ -40,6 +40,15 @@ export const query = async (req, res) => {
     }
 };
 
+export const resetChatHistory = async (req, res) => {
+    try {
+        chatHistory = [];
+        res.status(200).json({ message: "Chat history reset successfully." });
+    } catch (error) {
+        res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+    }
+};
+
 export const createRAGBot = async (req, res) => {
     try {
         const ragbot = req.body;
@@ -57,6 +66,14 @@ export const createRAGBot = async (req, res) => {
                 message: "Please include a valid ragbot.",
             });
         }
+
+        const ragbotList = await getAllRagBotsCollectionsByName();
+        if (ragbotList.includes(ragbot.collectionName)) {
+            return res.status(400).json({
+                message: "RAG Bot with this collection name already exists.",
+            });
+        }
+
         await createRagBot(ragbot);
 
         res.status(200).json({ message: "RAG Bot created successfully." });
