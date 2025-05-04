@@ -24,7 +24,7 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
 });
 
 // Creates a template of the message sent to OpenAI API with context from the database and the users question
-const CreateMessageTemplate = async (userMessage) => {
+const CreateMessageTemplate = async (userMessage, ragbot) => {
     try {
         let docContext = "";
 
@@ -35,7 +35,7 @@ const CreateMessageTemplate = async (userMessage) => {
         });
 
         try {
-            const collection = await db.collection(ASTRA_DB_COLLECTION);
+            const collection = await db.collection(ragbot.collectionName);
 
             const contextVectors = collection.find(null, {
                 sort: {
@@ -55,9 +55,17 @@ const CreateMessageTemplate = async (userMessage) => {
 
         const template = {
             role: "system",
-            content: `You are an AI assistant who knows everything about Formula One.Use the below context to augment what you know about Formula One racing. The context will provide you with the most recent page data from wikipedia, the official F1 website and others.
-            If the context doesn't include the information you need answer based on your existing knowledge and don't mention the source of your information or
-            what the context does or doesn't include.
+            content: `
+            You are an AI assistant who knows everything about ${ragbot.specialization}.Use the below context to augment what you know about ${ragbot.specialization}.
+
+            Your tone is ${ragbot.tone}. 
+            
+            Your audience is ${ragbot.audience}. 
+            
+            If the context doesn't include the information you need to answer then you should ${ragbot.unknown}. 
+            
+            Your behavior is ${ragbot.behavior}. 
+            
             Format responses using markdown where applicable and don't return images.
             
             ----------------------------
@@ -76,10 +84,10 @@ const CreateMessageTemplate = async (userMessage) => {
 };
 
 // Function is called with the chat history and returns the response from OpenAI
-const OpenAIApiCall = async (chatHistory) => {
+const OpenAIApiCall = async (chatHistory, ragbot) => {
     const lastMessage = chatHistory[chatHistory.length - 1].content;
 
-    const messageTemplate = await CreateMessageTemplate(lastMessage);
+    const messageTemplate = await CreateMessageTemplate(lastMessage, ragbot);
 
     const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
