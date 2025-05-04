@@ -16,8 +16,32 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
 });
 const collection = db.collection(ASTRA_DB_COLLECTION);
 
+const doesLinkExist = async (collectionName, link) => {
+    const ragBot = await collection.findOne({
+        collectionName: collectionName,
+    });
+
+    let doesExist = false;
+
+    ragBot.links.forEach((ragbotLink) => {
+        if (ragbotLink === link) {
+            doesExist = true;
+        }
+    });
+
+    return doesExist;
+};
+
 export const createCollection = async (ragbot) => {
     await collection.insertOne(ragbot);
+};
+
+export const getRagBotInfoByCollectionName = async (collectionName) => {
+    const ragBot = await collection.findOne({
+        collectionName: collectionName,
+    });
+
+    return ragBot;
 };
 
 export const getAllRagBotsInfo = async () => {
@@ -31,6 +55,28 @@ export const getAllRagBotsCollectionsByName = async () => {
         return ragbot.collectionName;
     });
     return allRagBotsCollectionsName;
+};
+
+export const addLinksToRagBot = async (collectionName, links) => {
+    let validLinks = [];
+
+    for (const link of links) {
+        const doesExist = await doesLinkExist(collectionName, link);
+
+        console.log("Link: ", link, " doesExist: ", doesExist);
+
+        if (!doesExist) {
+            await collection.updateOne(
+                { collectionName: collectionName },
+                { $push: { links: link } }
+            );
+            validLinks.push(link);
+        } else {
+            console.log("Link already exists in the collection.");
+        }
+    }
+    console.log("Valid links to add:", validLinks);
+    return validLinks;
 };
 
 export const deleteRagBot = async (collectionName) => {

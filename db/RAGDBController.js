@@ -109,13 +109,13 @@ export const newCollection = async (collectionName, ragData) => {
     }
 };
 
-export const addDataToCollection = async (collectionName, ragData) => {
+export const addDataToCollection = async (collectionName, links) => {
     try {
         if (!(await db.collection(collectionName))) {
             console.error("Collection does not exist:", collectionName);
             return;
         }
-        await loadSampleData(collectionName, ragData);
+        await loadSampleData(collectionName, links);
     } catch (error) {
         console.error("Error loading data:", error);
     }

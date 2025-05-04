@@ -4,6 +4,7 @@ import {
     createRAGBot,
     getAllRAGBotCollectionsByName,
     getAllRAGBotsInfo,
+    addDataToRAGBot,
     deleteRAGBot,
 } from "../controller/controller.js";
 
@@ -13,7 +14,9 @@ route.get("/getAllRAGBotCollectionsByName", getAllRAGBotCollectionsByName);
 route.get("/getAllRAGBotsInfo", getAllRAGBotsInfo);
 
 route.post("/query", query);
-route.post("/createragbot", createRAGBot);
+route.post("/createRAGBot", createRAGBot);
+
+route.put("/addDataToRAGBot", addDataToRAGBot);
 
 route.delete("/deleteRAGBot", deleteRAGBot);
 
