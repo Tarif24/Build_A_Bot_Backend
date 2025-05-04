@@ -14,7 +14,11 @@ let chatHistory = [];
 
 export const query = async (req, res) => {
     try {
-        if (!req.body.query || req.body.query.trim() === "") {
+        if (
+            !req.body.query ||
+            req.body.query.trim() === "" ||
+            !req.body.collectionName
+        ) {
             return res
                 .status(400)
                 .json({ message: "Please include a valid query." });
@@ -22,7 +26,11 @@ export const query = async (req, res) => {
 
         chatHistory.push({ role: "user", content: req.body.query.toString() });
 
-        const response = await OpenAIApiCall(chatHistory);
+        const collectionName = req.body.collectionName;
+
+        const ragbot = await getRagBotInfoByCollectionName(collectionName);
+
+        const response = await OpenAIApiCall(chatHistory, ragbot);
 
         chatHistory.push(response);
 
