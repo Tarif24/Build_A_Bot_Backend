@@ -162,6 +162,7 @@ export const addDataToRAGBot = async (req, res) => {
         if (validLinks.length === 0) {
             return res.status(400).json({
                 message: "No new links to add.",
+                validLinks: validLinks,
             });
         }
         res.status(200).json({
@@ -169,7 +170,10 @@ export const addDataToRAGBot = async (req, res) => {
             validLinks: validLinks,
         });
     } catch (error) {
-        res.status(500).json({ message: "INTERNAL SERVER ERROR" });
+        res.status(500).json({
+            message: "INTERNAL SERVER ERROR",
+            validLinks: validLinks,
+        });
     }
 };
 

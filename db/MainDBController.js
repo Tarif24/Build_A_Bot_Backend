@@ -7,7 +7,9 @@ import {
     newCollection,
     deleteRagBotCollection,
     addDataToCollection,
+    isLinkValid,
 } from "./RAGDBController.js";
+import e from "express";
 
 export const createRagBot = async (ragbot) => {
     await createCollection(ragbot);
@@ -22,6 +24,15 @@ export const addDataToRagBot = async (collectionName, links) => {
         console.log("No new links to add.");
         return validLinks;
     }
+
+    for (const link of validLinks) {
+        const doesExist = await isLinkValid(link);
+        if (!doesExist) {
+            validLinks.splice(validLinks.indexOf(link), 1);
+            console.log("Link is not valid:", link);
+        }
+    }
+
     await addDataToCollection(collectionName, validLinks);
 
     return validLinks;

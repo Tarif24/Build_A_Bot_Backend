@@ -128,3 +128,23 @@ export const deleteRagBotCollection = async (collectionName) => {
         console.error("Error deleting collection:", error);
     }
 };
+
+export const isLinkValid = async (url) => {
+    try {
+        const loader = new PuppeteerWebBaseLoader(url, {
+            launchOptions: {
+                headless: true,
+            },
+            gotoOptions: {
+                waitUntil: "domcontentloaded",
+            },
+        });
+
+        // Attempt to scrape the page to check if it's accessible
+        await loader.scrape();
+        return true; // Link is valid
+    } catch (error) {
+        console.error(`Invalid link: ${url}`, error.message);
+        return false; // Link is invalid
+    }
+};
