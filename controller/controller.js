@@ -194,8 +194,7 @@ export const editRAGBot = async (req, res) => {
             !ragbot.tone ||
             !ragbot.audience ||
             !ragbot.unknown ||
-            !ragbot.behavior ||
-            !ragbot.links
+            !ragbot.behavior
         ) {
             return res.status(400).json({
                 message: "Please include a valid ragbot.",
