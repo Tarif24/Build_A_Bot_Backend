@@ -8,6 +8,8 @@ import {
     getAllRagBotsCollectionsByName,
     getAllRagBotsInfo,
     getRagBotInfoByCollectionName,
+    editRagBot,
+    doesRagBotExist,
 } from "../db/RAGDBListController.js";
 
 let chatHistory = [];
@@ -173,6 +175,44 @@ export const addDataToRAGBot = async (req, res) => {
         res.status(500).json({
             message: "INTERNAL SERVER ERROR",
             validLinks: validLinks,
+        });
+    }
+};
+
+export const editRAGBot = async (req, res) => {
+    try {
+        const collectionName = req.body.collectionName;
+        const ragbot = req.body;
+        if (!collectionName || collectionName.trim() === "") {
+            return res.status(400).json({
+                message: "Please include a valid collection name.",
+            });
+        }
+        if (
+            !ragbot ||
+            !ragbot.specialization ||
+            !ragbot.tone ||
+            !ragbot.audience ||
+            !ragbot.unknown ||
+            !ragbot.behavior ||
+            !ragbot.links
+        ) {
+            return res.status(400).json({
+                message: "Please include a valid ragbot.",
+            });
+        }
+        const doesExist = await doesRagBotExist(collectionName);
+        if (!doesExist) {
+            return res.status(400).json({
+                message: "RAG Bot with this collection name does not exist.",
+            });
+        }
+        await editRagBot(collectionName, ragbot);
+        res.status(200).json({ message: "RAG Bot edited successfully." });
+    } catch (error) {
+        res.status(500).json({
+            message: "INTERNAL SERVER ERROR",
+            error: error,
         });
     }
 };

@@ -6,7 +6,9 @@ import {
     createRAGBot,
     getAllRAGBotCollectionsByName,
     getAllRAGBotsInfo,
+    getRAGBotInfoByCollectionName,
     addDataToRAGBot,
+    editRAGBot,
     deleteRAGBot,
 } from "../controller/controller.js";
 
@@ -19,8 +21,10 @@ route.get("/resetChatHistory", resetChatHistory);
 route.post("/query", query);
 route.post("/queryNoRAG", queryNoRAG);
 route.post("/createRAGBot", createRAGBot);
+route.post("/getRAGBotInfoByCollectionName", getRAGBotInfoByCollectionName);
 
 route.put("/addDataToRAGBot", addDataToRAGBot);
+route.put("/editRAGBot", editRAGBot);
 
 route.delete("/deleteRAGBot", deleteRAGBot);
 

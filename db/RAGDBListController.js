@@ -36,6 +36,17 @@ export const createCollection = async (ragbot) => {
     await collection.insertOne(ragbot);
 };
 
+export const doesRagBotExist = async (collectionName) => {
+    const ragBot = await collection.findOne({
+        collectionName: collectionName,
+    });
+    if (ragBot) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 export const getRagBotInfoByCollectionName = async (collectionName) => {
     const ragBot = await collection.findOne({
         collectionName: collectionName,
@@ -77,6 +88,23 @@ export const addLinksToRagBot = async (collectionName, links) => {
     }
     console.log("Valid links to add:", validLinks);
     return validLinks;
+};
+
+export const editRagBot = async (collectionName, ragBot) => {
+    await collection.updateOne(
+        { collectionName: collectionName },
+        {
+            $set: {
+                // Use $set for the other fields as well
+                specialization: ragBot.specialization,
+                tone: ragBot.tone,
+                audience: ragBot.audience,
+                unknown: ragBot.unknown,
+                behavior: ragBot.behavior,
+                links: ragBot.links,
+            },
+        }
+    );
 };
 
 export const deleteRagBot = async (collectionName) => {
