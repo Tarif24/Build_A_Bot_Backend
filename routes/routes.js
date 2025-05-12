@@ -12,6 +12,7 @@ import {
     deleteRAGBot,
 } from "../controller/controller.js";
 
+// Crete a new express router that will handle all the routes
 const route = express.Router();
 
 route.get("/getAllRAGBotCollectionsByName", getAllRAGBotCollectionsByName);

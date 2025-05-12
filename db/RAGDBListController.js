@@ -16,6 +16,7 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
 });
 const collection = db.collection(ASTRA_DB_COLLECTION);
 
+// checks if a link already exists in the list of links for a given RAG Bot
 const doesLinkExist = async (collectionName, link) => {
     const ragBot = await collection.findOne({
         collectionName: collectionName,
@@ -32,10 +33,12 @@ const doesLinkExist = async (collectionName, link) => {
     return doesExist;
 };
 
+// adds the new RAG bot to the list of RAG bots
 export const createCollection = async (ragbot) => {
     await collection.insertOne(ragbot);
 };
 
+// checks if a RAG bot already exists in the list of RAG bots
 export const doesRagBotExist = async (collectionName) => {
     const ragBot = await collection.findOne({
         collectionName: collectionName,
@@ -68,6 +71,7 @@ export const getAllRagBotsCollectionsByName = async () => {
     return allRagBotsCollectionsName;
 };
 
+// adds all the links to a given RAG bot
 export const addLinksToRagBot = async (collectionName, links) => {
     let validLinks = [];
 

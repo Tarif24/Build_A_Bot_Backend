@@ -6,7 +6,6 @@ dotenv.config();
 
 // All varaiables needed to connect to Astra DB and OpenAI API
 const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
-const ASTRA_DB_COLLECTION = process.env.ASTRA_DB_COLLECTION;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
 const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -28,6 +27,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
     try {
         let docContext = "";
 
+        // Create the embedding for the user message
         const embedding = await openai.embeddings.create({
             model: "text-embedding-3-small",
             input: userMessage,
@@ -37,6 +37,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
         try {
             const collection = await db.collection(ragbot.collectionName);
 
+            // Finding similar vectors in the database to use as context
             const contextVectors = collection.find(null, {
                 sort: {
                     $vector: embedding.data[0].embedding,
@@ -83,7 +84,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
     }
 };
 
-// Function is called with the chat history and returns the response from OpenAI
+// Uses the chat history and ragbot to make a template then call the OpenAI API uses RAG
 const OpenAIApiCallRAG = async (chatHistory, ragbot) => {
     const lastMessage = chatHistory[chatHistory.length - 1].content;
 
@@ -98,6 +99,7 @@ const OpenAIApiCallRAG = async (chatHistory, ragbot) => {
     return response.choices[0].message;
 };
 
+// Uses the chat history to make a call to OpenAI API without RAG
 export const OpenAIApiCallNoRAG = async (chatHistory) => {
     const lastMessage = chatHistory[chatHistory.length - 1];
 
