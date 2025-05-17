@@ -124,10 +124,10 @@ export const createRAGBot = async (req, res) => {
         }
 
         const doesExist = await doesRagBotExist(req.body.collectionName);
-        if (!doesExist) {
+        if (doesExist) {
             return res
                 .status(400)
-                .json({ message: "RAG Bot does not exist.", success: false });
+                .json({ message: "RAG Bot already exists.", success: false });
         }
 
         await createRagBot(ragbot);
