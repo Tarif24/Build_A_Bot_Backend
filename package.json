@@ -15,7 +15,8 @@
     "type": "module",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon index.js",
+        "start": "node index.js",
+        "dev": "nodemon index.js",
         "load": "node db/LoadDB.js",
         "postinstall": "echo Skipping Puppeteer Chromium download"
     },
