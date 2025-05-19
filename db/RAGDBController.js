@@ -85,6 +85,8 @@ const scrapePage = async (url) => {
     const loader = new PuppeteerWebBaseLoader(url, {
         launchOptions: {
             headless: true, // Runs the browser without a GUI
+            executablePath: "/usr/bin/chromium",
+            args: ["--no-sandbox", "--disable-setuid-sandbox"],
         },
         gotoOptions: {
             waitUntil: "domcontentloaded",
@@ -139,6 +141,8 @@ export const isLinkValid = async (url) => {
         const loader = new PuppeteerWebBaseLoader(url, {
             launchOptions: {
                 headless: true,
+                executablePath: "/usr/bin/chromium",
+                args: ["--no-sandbox", "--disable-setuid-sandbox"],
             },
             gotoOptions: {
                 waitUntil: "domcontentloaded",

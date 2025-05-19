@@ -16,7 +16,8 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon index.js",
-        "load": "node db/LoadDB.js"
+        "load": "node db/LoadDB.js",
+        "postinstall": "echo Skipping Puppeteer Chromium download"
     },
     "dependencies": {
         "@datastax/astra-db-ts": "^1.5.0",
