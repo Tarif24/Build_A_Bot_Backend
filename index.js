@@ -3,14 +3,19 @@ import dotenv from "dotenv";
 import route from "./routes/routes.js";
 import { createRequire } from "module";
 
-// Init and config seting up express app and dotenv
+// Init and config setting up express app and dotenv
 const require = createRequire(import.meta.url);
 const app = express();
 const cors = require("cors");
 dotenv.config();
 
 // Setting up express middleware
-app.use(cors());
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+    })
+);
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;

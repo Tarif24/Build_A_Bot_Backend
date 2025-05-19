@@ -35,8 +35,8 @@ RUN npm install
 # Copy the rest of your app
 COPY . .
 
-# Optional: expose the port your app runs on (change if not 3000)
-EXPOSE 3000
+# Optional:
+EXPOSE 8000
 
 # Start the app
 CMD ["npm", "start"]
