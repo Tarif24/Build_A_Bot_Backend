@@ -1,0 +1,7 @@
+services:
+    - type: web
+      name: puppeteer-service
+      env: docker
+      plan: free
+      dockerfilePath: ./Dockerfile
+      autoDeploy: true
