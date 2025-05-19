@@ -45,6 +45,6 @@ export const addDataToRagBot = async (collectionName, links) => {
 export const deleteExistingRagBot = async (collectionName) => {
     // deletes the collection from the list of RAG bots
     await deleteRagBot(collectionName);
-    // deletes the collecction that hold all the context for the RAG bot
+    // deletes the collection that hold all the context for the RAG bot
     await deleteRagBotCollection(collectionName);
 };

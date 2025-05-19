@@ -8,7 +8,7 @@ dotenv.config();
 
 let SimilarityMetric = "cosine" | "dot_product" | "euclidean";
 
-// All varaiables needed to connect to Astra DB and OpenAI API
+// All variables needed to connect to Astra DB and OpenAI API
 const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
 const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
@@ -26,7 +26,7 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
     namespace: ASTRA_DB_NAMESPACE,
 });
 
-// Initilizing a chuck splitter to split the text into smaller chunks the unit of the numbers are characters
+// Initializing a chuck splitter to split the text into smaller chunks the unit of the numbers are characters
 const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 512,
     chunkOverlap: 100,
@@ -90,7 +90,7 @@ const scrapePage = async (url) => {
             waitUntil: "domcontentloaded",
         },
         evaluate: async (page, browser) => {
-            const result = await page.evaluate(() => document.body.innerHTML); // gets all the html contet inside the body tag
+            const result = await page.evaluate(() => document.body.innerHTML); // gets all the html content inside the body tag
             await browser.close(); // closes the browser after scraping to not waste resources
             return result;
         },
