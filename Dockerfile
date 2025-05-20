@@ -22,9 +22,6 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set environment variable to skip Puppeteer's Chromium download
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-
 # Set working directory
 WORKDIR /app
 

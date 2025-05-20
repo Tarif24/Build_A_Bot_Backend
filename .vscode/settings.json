@@ -2,8 +2,11 @@
     "cSpell.words": [
         "datastax",
         "domcontentloaded",
+        "keyspace",
         "langchain",
         "ragbot",
-        "RAGDB"
+        "RAGDB",
+        "ragdblist",
+        "raggpt"
     ]
 }

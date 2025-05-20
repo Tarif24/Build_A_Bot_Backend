@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// All varaiables needed to connect to Astra DB and OpenAI API
+// All variables needed to connect to Astra DB and OpenAI API
 const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
 const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
@@ -74,7 +74,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
             ${docContext}
             END OF CONTEXT
             ----------------------------
-            QUESTIION: ${userMessage}
+            QUESTION: ${userMessage}
             ----------------------------`,
         };
 
