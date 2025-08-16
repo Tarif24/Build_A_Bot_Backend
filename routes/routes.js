@@ -8,6 +8,7 @@ import {
     getAllRAGBotsInfo,
     getRAGBotInfoByCollectionName,
     addDataToRAGBot,
+    uploadPDF,
     editRAGBot,
     deleteRAGBot,
 } from "../controller/controller.js";
@@ -25,6 +26,7 @@ route.post("/createRAGBot", createRAGBot);
 route.post("/getRAGBotInfoByCollectionName", getRAGBotInfoByCollectionName);
 
 route.put("/addDataToRAGBot", addDataToRAGBot);
+route.post("/uploadPDF", uploadPDF);
 route.put("/editRAGBot", editRAGBot);
 
 route.delete("/deleteRAGBot", deleteRAGBot);

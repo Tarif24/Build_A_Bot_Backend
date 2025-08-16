@@ -18,7 +18,7 @@
         "start": "node index.js",
         "dev": "nodemon index.js",
         "load": "node db/LoadDB.js",
-        "postinstall": "echo Skipping Puppeteer Chromium download"
+        "postinstall": "echo Skipping Puppeteer Chromium download && patch-package"
     },
     "dependencies": {
         "@datastax/astra-db-ts": "^1.5.0",
@@ -26,7 +26,10 @@
         "dotenv": "^16.5.0",
         "express": "^5.1.0",
         "langchain": "^0.1.36",
+        "multer": "^2.0.2",
         "openai": "^4.94.0",
+        "patch-package": "^8.0.0",
+        "pdf-parse": "^1.1.1",
         "puppeteer": "^19.11.1"
     },
     "devDependencies": {

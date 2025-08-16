@@ -11,6 +11,7 @@ import {
     editRagBot,
     doesRagBotExist,
 } from "../db/RAGDBListController.js";
+import pdfParse from "pdf-parse";
 
 let chatHistory = [];
 let chatHistoryNoRAG = [];
@@ -244,6 +245,25 @@ export const addDataToRAGBot = async (req, res) => {
             validLinks: validLinks,
             error: error,
         });
+    }
+};
+
+export const uploadPDF = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: "No file uploaded" });
+        }
+
+        // Extract text from PDF buffer
+        const data = await pdfParse(req.file.buffer);
+
+        res.json({
+            message: "PDF processed successfully",
+            text: data.text, // raw extracted text
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to process PDF" });
     }
 };
 

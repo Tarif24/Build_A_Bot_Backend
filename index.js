@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import multer from "multer";
 import route from "./routes/routes.js";
 import { createRequire } from "module";
 
@@ -9,9 +10,14 @@ const app = express();
 const cors = require("cors");
 dotenv.config();
 
+// Configure multer to store files in memory (no disk saving needed)
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 // Setting up express middleware
 app.use(cors());
 app.use(express.json());
+app.use("/api/uploadPDF", upload.single("pdf"));
 
 const PORT = process.env.PORT || 5000;
 
