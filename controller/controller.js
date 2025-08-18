@@ -202,8 +202,12 @@ export const getRAGBotInfoByCollectionName = async (req, res) => {
 // used to add data to an existing RAG bot
 export const addDataToRAGBot = async (req, res) => {
     try {
-        const collectionName = req.body.collectionName;
-        const links = req.body.links;
+        const body = JSON.parse(req.body.json);
+
+        console.log("Body:", body);
+
+        const collectionName = body.collectionName;
+        const links = body.links;
         if (!collectionName || collectionName.trim() === "") {
             return res.status(400).json({
                 message: "Please include a valid collection name.",
@@ -211,7 +215,10 @@ export const addDataToRAGBot = async (req, res) => {
             });
         }
 
-        if (!links || links.length === 0) {
+        if (
+            (!links || links.length === 0) &&
+            (!req.files || req.files.length === 0)
+        ) {
             return res.status(400).json({
                 message: "Please include valid data to add.",
                 success: false,
@@ -225,7 +232,31 @@ export const addDataToRAGBot = async (req, res) => {
                 .json({ message: "RAG Bot does not exist.", success: false });
         }
 
-        const validLinks = await addDataToRagBot(collectionName, links);
+        const processedFiles = [];
+
+        for (const file of req.files) {
+            if (file.mimetype !== "application/pdf") {
+                return res.status(400).json({
+                    error: "Only PDF files are allowed",
+                });
+            }
+
+            // Extract text from PDF buffer
+            const data = await pdfParse(file.buffer);
+
+            const cleanedText = data.text.replace(/\n/g, " ").trim();
+
+            processedFiles.push({
+                filename: file.originalname,
+                text: cleanedText, // raw extracted text
+            });
+        }
+
+        const validLinks = await addDataToRagBot(
+            collectionName,
+            links,
+            processedFiles
+        );
         if (validLinks.length === 0) {
             return res.status(400).json({
                 message: "No new links to add.",
@@ -242,28 +273,8 @@ export const addDataToRAGBot = async (req, res) => {
         res.status(500).json({
             message: "INTERNAL SERVER ERROR",
             success: false,
-            validLinks: validLinks,
             error: error,
         });
-    }
-};
-
-export const uploadPDF = async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({ error: "No file uploaded" });
-        }
-
-        // Extract text from PDF buffer
-        const data = await pdfParse(req.file.buffer);
-
-        res.json({
-            message: "PDF processed successfully",
-            text: data.text, // raw extracted text
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to process PDF" });
     }
 };
 

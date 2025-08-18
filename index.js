@@ -17,7 +17,8 @@ const upload = multer({ storage: storage });
 // Setting up express middleware
 app.use(cors());
 app.use(express.json());
-app.use("/api/uploadPDF", upload.single("pdf"));
+app.use("/api/addDataToRAGBot", upload.array("pdf", 15));
+app.use("/api/createRAGBot", upload.array("pdf", 15));
 
 const PORT = process.env.PORT || 5000;
 

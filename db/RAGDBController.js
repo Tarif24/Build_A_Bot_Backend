@@ -28,7 +28,7 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
 
 // Initializing a chuck splitter to split the text into smaller chunks the unit of the numbers are characters
 const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 512,
+    chunkSize: 300,
     chunkOverlap: 100,
 });
 
@@ -48,10 +48,10 @@ const createCollection = async (
 };
 
 // goes through each link calls the scrape function then uses the text splitter to split the text into smaller chunks then for each chuck it creates an embedding using the OpenAI API and inserts it into the collection
-const loadSampleData = async (collectionName, ragData) => {
+const loadLinkData = async (collectionName, links) => {
     const collection = await db.collection(collectionName);
 
-    for await (const url of ragData) {
+    for await (const url of links) {
         console.log("SCRAPING URL: ", url);
         // the content will contain all the text from the page
         const content = await scrapePage(url);
@@ -77,7 +77,36 @@ const loadSampleData = async (collectionName, ragData) => {
         console.log("ALL DATA LOADED TO DB FOR URL: ", url);
     }
 
-    console.log("ALL DATA LOADED TO DB SUCCESSFULLY");
+    console.log("ALL LINKS LOADED TO DB SUCCESSFULLY");
+};
+
+const loadPDFData = async (collectionName, files) => {
+    const collection = await db.collection(collectionName);
+
+    for await (const file of files) {
+        console.log("LOADING FILE: ", file.filename);
+        // will split the content into predefined chunks using the text splitter
+        const chunks = await splitter.splitText(file.text);
+        for await (const chunk of chunks) {
+            const embedding = await openai.embeddings.create({
+                model: "text-embedding-3-small",
+                input: chunk,
+                encoding_format: "float",
+            });
+
+            const vector = embedding.data[0].embedding;
+
+            const res = await collection.insertOne({
+                $vector: vector,
+                text: chunk,
+            });
+
+            console.log("Inserted:", res);
+        }
+        console.log("ALL DATA LOADED TO DB FOR FILE: ", file.filename);
+    }
+
+    console.log("ALL FILES LOADED TO DB SUCCESSFULLY");
 };
 
 // Scrapes the page using puppeteer and returns the text content of the page
@@ -113,14 +142,15 @@ export const newCollection = async (collectionName, ragData) => {
 };
 
 // adds additional data to an existing collection
-export const addDataToCollection = async (collectionName, links) => {
+export const addDataToCollection = async (collectionName, links, files) => {
     try {
         // Check if the collection exists
         if (!(await db.collection(collectionName))) {
             console.error("Collection does not exist:", collectionName);
             return;
         }
-        await loadSampleData(collectionName, links);
+        await loadLinkData(collectionName, links);
+        await loadPDFData(collectionName, files);
     } catch (error) {
         console.error("Error loading data:", error);
     }

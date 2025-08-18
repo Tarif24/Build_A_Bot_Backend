@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// All varaiables needed to connect to Astra DB
+// All variables needed to connect to Astra DB
 const ASTRA_DB_NAMESPACE = process.env.ASTRA_LIST_DB_NAMESPACE;
 const ASTRA_DB_COLLECTION = process.env.ASTRA_LIST_DB_COLLECTION;
 const ASTRA_DB_ENDPOINT = process.env.ASTRA_LIST_DB_ENDPOINT;
@@ -72,7 +72,7 @@ export const getAllRagBotsCollectionsByName = async () => {
 };
 
 // adds all the links to a given RAG bot
-export const addLinksToRagBot = async (collectionName, links) => {
+export const addLinksToRagBot = async (collectionName, links, files) => {
     let validLinks = [];
 
     for (const link of links) {

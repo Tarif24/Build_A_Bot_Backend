@@ -17,9 +17,9 @@ export const createRagBot = async (ragbot) => {
     await newCollection(ragbot.collectionName, ragbot.links);
 };
 
-export const addDataToRagBot = async (collectionName, links) => {
+export const addDataToRagBot = async (collectionName, links, files) => {
     // checks if any of the links are already in the collection if they are it will remove them from the list of links to add
-    const validLinks = await addLinksToRagBot(collectionName, links);
+    const validLinks = await addLinksToRagBot(collectionName, links, files);
     console.log("Valid links to add:", validLinks);
 
     if (validLinks.length === 0) {
@@ -37,7 +37,7 @@ export const addDataToRagBot = async (collectionName, links) => {
     }
 
     // sends the valid links to be scrapped and added to the collection
-    await addDataToCollection(collectionName, validLinks);
+    await addDataToCollection(collectionName, validLinks, files);
 
     return validLinks;
 };
