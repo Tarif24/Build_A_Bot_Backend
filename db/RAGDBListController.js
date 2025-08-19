@@ -45,9 +45,9 @@ export const doesRagBotExist = async (collectionName) => {
     });
     if (ragBot) {
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 };
 
 export const getRagBotInfoByCollectionName = async (collectionName) => {
@@ -72,7 +72,7 @@ export const getAllRagBotsCollectionsByName = async () => {
 };
 
 // adds all the links to a given RAG bot
-export const addLinksToRagBot = async (collectionName, links, files) => {
+export const addInfoToRagBot = async (collectionName, links, files) => {
     let validLinks = [];
 
     for (const link of links) {
@@ -91,6 +91,13 @@ export const addLinksToRagBot = async (collectionName, links, files) => {
         }
     }
     console.log("Valid links to add:", validLinks);
+
+    for (const file of files) {
+        await collection.updateOne(
+            { collectionName: collectionName },
+            { $push: { files: file.filename } }
+        );
+    }
     return validLinks;
 };
 

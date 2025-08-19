@@ -107,7 +107,7 @@ export const resetChatHistory = async (req, res) => {
 // used to create a new RAG bot
 export const createRAGBot = async (req, res) => {
     try {
-        const ragbot = req.body;
+        const ragbot = JSON.parse(req.body.json);
         if (
             !ragbot ||
             !ragbot.collectionName ||
@@ -116,7 +116,7 @@ export const createRAGBot = async (req, res) => {
             !ragbot.audience ||
             !ragbot.unknown ||
             !ragbot.behavior ||
-            !ragbot.links
+            !(ragbot.links || req.files)
         ) {
             return res.status(400).json({
                 message: "Please include a valid ragbot.",
@@ -124,14 +124,45 @@ export const createRAGBot = async (req, res) => {
             });
         }
 
-        const doesExist = await doesRagBotExist(req.body.collectionName);
+        const doesExist = await doesRagBotExist(ragbot.collectionName);
         if (doesExist) {
             return res
                 .status(400)
                 .json({ message: "RAG Bot already exists.", success: false });
         }
 
-        await createRagBot(ragbot);
+        const processedFiles = [];
+
+        for (const file of req.files) {
+            if (file.mimetype !== "application/pdf") {
+                return res.status(400).json({
+                    error: "Only PDF files are allowed",
+                });
+            }
+
+            // Extract text from PDF buffer
+            const data = await pdfParse(file.buffer);
+
+            const cleanedText = data.text.replace(/\n/g, " ").trim();
+
+            processedFiles.push({
+                filename: file.originalname,
+                text: cleanedText, // raw extracted text
+            });
+        }
+
+        let files = [];
+
+        for (const file of processedFiles) {
+            files.push(file.filename);
+        }
+
+        const finalRagbot = {
+            ...ragbot,
+            files: files,
+        };
+
+        await createRagBot(finalRagbot, processedFiles);
 
         res.status(200).json({
             message: "RAG Bot created successfully.",
@@ -204,8 +235,6 @@ export const addDataToRAGBot = async (req, res) => {
     try {
         const body = JSON.parse(req.body.json);
 
-        console.log("Body:", body);
-
         const collectionName = body.collectionName;
         const links = body.links;
         if (!collectionName || collectionName.trim() === "") {
@@ -251,15 +280,14 @@ export const addDataToRAGBot = async (req, res) => {
                 text: cleanedText, // raw extracted text
             });
         }
-
         const validLinks = await addDataToRagBot(
             collectionName,
             links,
             processedFiles
         );
-        if (validLinks.length === 0) {
+        if (validLinks.length === 0 && processedFiles.length === 0) {
             return res.status(400).json({
-                message: "No new links to add.",
+                message: "No new data to add.",
                 success: false,
                 validLinks: validLinks,
             });

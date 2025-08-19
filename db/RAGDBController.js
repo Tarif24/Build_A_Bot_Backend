@@ -28,7 +28,7 @@ const db = astraClient.db(ASTRA_DB_ENDPOINT, {
 
 // Initializing a chuck splitter to split the text into smaller chunks the unit of the numbers are characters
 const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 300,
+    chunkSize: 512,
     chunkOverlap: 100,
 });
 
@@ -132,10 +132,11 @@ const scrapePage = async (url) => {
 };
 
 // Creates a new collection in the database and loads sample data into it
-export const newCollection = async (collectionName, ragData) => {
+export const newCollection = async (collectionName, ragData, files) => {
     try {
         await createCollection(collectionName);
-        await loadSampleData(collectionName, ragData);
+        await loadLinkData(collectionName, ragData);
+        await loadPDFData(collectionName, files);
     } catch (error) {
         console.error("Error creating collection or loading data:", error);
     }

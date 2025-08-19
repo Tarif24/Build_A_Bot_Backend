@@ -1,7 +1,7 @@
 import {
     createCollection,
     deleteRagBot,
-    addLinksToRagBot,
+    addInfoToRagBot,
 } from "./RAGDBListController.js";
 import {
     newCollection,
@@ -10,19 +10,20 @@ import {
     isLinkValid,
 } from "./RAGDBController.js";
 
-export const createRagBot = async (ragbot) => {
+export const createRagBot = async (ragbot, files) => {
     // creates a new RAG bot using the information provided in the ragbot object
     await createCollection(ragbot);
     // creates a new collection in the database with the name of the ragbot to store all the context
-    await newCollection(ragbot.collectionName, ragbot.links);
+    await newCollection(ragbot.collectionName, ragbot.links, files);
 };
 
 export const addDataToRagBot = async (collectionName, links, files) => {
     // checks if any of the links are already in the collection if they are it will remove them from the list of links to add
-    const validLinks = await addLinksToRagBot(collectionName, links, files);
+    const validLinks = await addInfoToRagBot(collectionName, links, files);
+
     console.log("Valid links to add:", validLinks);
 
-    if (validLinks.length === 0) {
+    if (validLinks.length === 0 && files.length === 0) {
         console.log("No new links to add.");
         return validLinks;
     }
