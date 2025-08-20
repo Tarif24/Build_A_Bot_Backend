@@ -29,6 +29,10 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Copy and apply patches
+COPY patches/ ./patches/
+RUN npx patch-package
+
 # Copy the rest of your app
 COPY . .
 
