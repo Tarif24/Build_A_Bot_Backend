@@ -107,6 +107,7 @@ export const resetChatHistory = async (req, res) => {
 // used to create a new RAG bot
 export const createRAGBot = async (req, res) => {
     try {
+        // Need to parse the JSON body from the request since it was sent as a string in the form-data
         const ragbot = JSON.parse(req.body.json);
         if (
             !ragbot ||
@@ -143,6 +144,7 @@ export const createRAGBot = async (req, res) => {
             // Extract text from PDF buffer
             const data = await pdfParse(file.buffer);
 
+            // Remove newlines and trim the text
             const cleanedText = data.text.replace(/\n/g, " ").trim();
 
             processedFiles.push({
@@ -233,6 +235,7 @@ export const getRAGBotInfoByCollectionName = async (req, res) => {
 // used to add data to an existing RAG bot
 export const addDataToRAGBot = async (req, res) => {
     try {
+        // Need to parse the JSON body from the request since it was sent as a string in the form-data
         const body = JSON.parse(req.body.json);
 
         const collectionName = body.collectionName;
@@ -273,6 +276,7 @@ export const addDataToRAGBot = async (req, res) => {
             // Extract text from PDF buffer
             const data = await pdfParse(file.buffer);
 
+            // Remove newlines and trim the text
             const cleanedText = data.text.replace(/\n/g, " ").trim();
 
             processedFiles.push({
