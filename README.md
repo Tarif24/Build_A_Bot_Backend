@@ -285,6 +285,7 @@ This is a list of recourses that i found helpful and would like to give credit t
 -   [Puppeteer Documentation](https://pptr.dev/)
 -   [Langchain Documentation](https://python.langchain.com/docs/introduction/)
 -   [Patch-Package Documentation](https://www.npmjs.com/package/patch-package)
+-   [PDF-Parse Documentation](https://www.npmjs.com/package/pdf-parse)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
