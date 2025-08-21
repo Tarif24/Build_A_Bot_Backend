@@ -94,7 +94,7 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 
 ### Routes
 
-#### GET
+#### GET:
 
 <br/>
 
@@ -127,94 +127,127 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+#### POST:
+
+-   To make a query to a specific bot
+-   The query along with a collection name is needed
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+    https://rag-chat-bot-api.onrender.com/api/query
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+-   Normal query to chatgpt without the RAG aspects
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+    https://rag-chat-bot-api.onrender.com/api/queryNoRAG
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+-   To build a bot and add some initial data
+-   Needs to be sent as a form data add files with "pdf" and add the json Bot object with "json"
+-   The structure for the object is down below
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+    https://rag-chat-bot-api.onrender.com/api/createRAGBot
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+-   To get all the info of a given collection need the collection name
+-   The return is the Bot object but with a "files" attribute too for all the files
+-   Structure:
+    <br/>
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+{
+    "collectionName": ""
+}
+```
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/getRAGBotInfoByCollectionName
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+#### PUT:
+
+-   To add more data to a given bot beyond the initial seed data
+-   The Return will be the success of the operation
+-   Needs to be sent as a form data add files with "pdf" and add the json Bot object with "json"
+-   Structure:
+    <br/>
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+{
+    "collectionName": ""
+    "links": [""]
+}
+```
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/addDataToRAGBot
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+-   To edit the attributes of a existing Bot
+-   The Return will be the success of the operation
+-   Structure:
+    <br/>
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+{
+    "collectionName": "",
+    "specialization" : "",
+    "tone" : "",
+    "audience" : "",
+    "unknown" : "",
+    "behavior" : ""
+}
+```
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/editRAGBot
 ```
 
 <br/>
 <br/>
 
--   To get all the jobs that are available the structure of a job will be down below
--   The Return will be an array of all the jobs
+#### DELETE:
+
+-   To delete a RAG bot from the DB it deletes the attributes and the saved data
+-   The Return will be if the job succeeded or not
 
 ```sh
-    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+    https://rag-chat-bot-api.onrender.com/api/deleteRAGBot
 ```
 
 <br/>
 
 <br/>
 <br/>
-JOB OBJECT STRUCTURE:
+BOT OBJECT STRUCTURE:
 <br/>
 <br/>
 
 ```sh
 {
-      "title": "",
-      "type": "",
-      "description": "",
-      "location": "",
-      "salary": "",
-      "company": {
-        "name": "",
-        "description": "",
-        "contactEmail": "",
-        "contactPhone": ""
-      }
+    "collectionName": "",
+    "specialization": "",
+    "tone": "",
+    "audience": "",
+    "unknown": "",
+    "behavior": "",
+    "links": [""]
 }
 ```
 
