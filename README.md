@@ -70,6 +70,7 @@ These are all of the tools used for this project
 -   AstraDB
 -   ChatGPT gpt-4o-mini API
 -   Claude (Integrated claude into my development flow to improve efficiency and see different ways claude approached the problem which helped me start my train of thought)
+-   Docker
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
