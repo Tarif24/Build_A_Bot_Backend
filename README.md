@@ -94,56 +94,108 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 
 ### Routes
 
+#### GET
+
+<br/>
+
+-   To get all of the RAG bot collections by their name
+-   The Return will be an array of all the RAG bot collection names
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+```
+
+<br/>
+<br/>
+
+-   To get all the RAG bots with the info the user added like behavior and tone
+-   The Return will be an array of all the RAG bot collection the their attributes
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotsInfo
+```
+
+<br/>
+<br/>
+
+-   Used to reset the chat history when switching between RAG bots
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/resetChatHistory
+```
+
+<br/>
 <br/>
 
 -   To get all the jobs that are available the structure of a job will be down below
 -   The Return will be an array of all the jobs
 
 ```sh
-    https://job-listing-api-84p2.onrender.com/api/job/getAllJobs
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
 ```
 
 <br/>
 <br/>
 
--   To get a specific job from the list the ID is needed the structure of the job will be down below
--   The Return will be the specific job that has that ID
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
 
 ```sh
-https://job-listing-api-84p2.onrender.com/api/job/:ID
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
 ```
 
 <br/>
 <br/>
 
--   To create a job a job object is required and the structure will be down below
--   The Return will be the job that was just created
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
 
 ```sh
-https://job-listing-api-84p2.onrender.com/api/job/create
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
 ```
 
 <br/>
 <br/>
 
--   To update a job a job object is required and the structure will be down below and a job id is required
--   The Return will be the job that was just updated
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
 
 ```sh
-https://job-listing-api-84p2.onrender.com/api/job/update/:ID
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
 ```
 
 <br/>
 <br/>
 
--   To Delete a job a job ID is required
--   The Return will be a confirmation message
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
 
 ```sh
-    https://job-listing-api-84p2.onrender.com/api/job/delete/:ID
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
 ```
 
 <br/>
+<br/>
+
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+```
+
+<br/>
+<br/>
+
+-   To get all the jobs that are available the structure of a job will be down below
+-   The Return will be an array of all the jobs
+
+```sh
+    https://rag-chat-bot-api.onrender.com/api/getAllRAGBotCollectionsByName
+```
+
+<br/>
+
 <br/>
 <br/>
 JOB OBJECT STRUCTURE:
