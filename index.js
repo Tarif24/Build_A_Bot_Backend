@@ -22,8 +22,48 @@ app.use("/api/createRAGBot", upload.array("pdf", 15));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`SERVER IS RUNNING ON PORT ${PORT}`);
+});
+
+// Graceful shutdown handling
+const gracefulShutdown = (signal) => {
+    console.log(`${signal} received, shutting down gracefully`);
+
+    server.close((err) => {
+        if (err) {
+            console.error("Error during server shutdown:", err);
+            process.exit(1);
+        }
+
+        console.log("Server closed successfully");
+
+        // Close database connections, cleanup resources, etc.
+        // db.close() if you have a database
+
+        process.exit(0);
+    });
+
+    // Force close after 10 seconds
+    setTimeout(() => {
+        console.error("Forced shutdown after timeout");
+        process.exit(1);
+    }, 10000);
+};
+
+// Handle shutdown signals
+process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+
+// Handle uncaught exceptions
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught Exception:", err);
+    gracefulShutdown("UNCAUGHT_EXCEPTION");
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Unhandled Rejection at:", promise, "reason:", reason);
+    gracefulShutdown("UNHANDLED_REJECTION");
 });
 
 // Setting up express routes sets up a route middleware that will pass any request beginning with /api to the route file and the route file will handle the request
