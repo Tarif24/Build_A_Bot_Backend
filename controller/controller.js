@@ -167,7 +167,7 @@ export const createRAGBot = async (req, res) => {
         await createRagBot(finalRagbot, processedFiles);
 
         res.status(200).json({
-            message: "RAG Bot created successfully.",
+            message: `Created RAG BOT ${ragbot.collectionName} successfully.`,
             success: true,
         });
     } catch (error) {
@@ -342,8 +342,11 @@ export const editRAGBot = async (req, res) => {
             });
         }
         await editRagBot(collectionName, ragbot);
+
+        const msg = `RAG Bot ${collectionName} edited successfully`;
+
         res.status(200).json({
-            message: "RAG Bot edited successfully.",
+            message: msg,
             success: true,
         });
     } catch (error) {
@@ -375,7 +378,7 @@ export const deleteRAGBot = async (req, res) => {
 
         await deleteExistingRagBot(collectionName);
         res.status(200).json({
-            message: "RAG Bot deleted successfully.",
+            message: `RAG Bot ${collectionName} deleted successfully`,
             success: true,
         });
     } catch (error) {
