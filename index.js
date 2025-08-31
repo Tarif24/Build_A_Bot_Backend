@@ -30,6 +30,10 @@ const server = app.listen(PORT, () => {
 const gracefulShutdown = (signal) => {
     console.log(`${signal} received, shutting down gracefully`);
 
+    if (!server) {
+        console.log("Server is not running");
+        process.exit(1);
+    }
     server.close((err) => {
         if (err) {
             console.error("Error during server shutdown:", err);
@@ -52,7 +56,11 @@ const gracefulShutdown = (signal) => {
 };
 
 // Handle shutdown signals
-process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+//process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+process.on("SIGTERM", () => {
+    console.log("SIGTERM handler called");
+    gracefulShutdown("SIGTERM");
+});
 process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 
 // Handle uncaught exceptions
