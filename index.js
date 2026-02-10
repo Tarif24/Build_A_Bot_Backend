@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import multer from "multer";
 import route from "./routes/routes.js";
 import { createRequire } from "module";
+import { DataAPIClient } from "@datastax/astra-db-ts";
 
 // Init and config setting up express app and dotenv
 const require = createRequire(import.meta.url);
@@ -54,6 +55,36 @@ const gracefulShutdown = (signal) => {
         process.exit(1);
     }, 10000);
 };
+
+const keepDBAlive = () => {
+    // All variables needed to connect to Astra DB
+    const ASTRA_LIST_DB_NAMESPACE = process.env.ASTRA_LIST_DB_NAMESPACE;
+    const ASTRA_LIST_DB_COLLECTION = process.env.ASTRA_LIST_DB_COLLECTION;
+    const ASTRA_LIST_DB_ENDPOINT = process.env.ASTRA_LIST_DB_ENDPOINT;
+    const ASTRA_LIST_DB_APPLICATION_TOKEN =
+        process.env.ASTRA_LIST_DB_APPLICATION_TOKEN;
+
+    // Connect to Astra DB then the database then the collection
+    const astraClient1 = new DataAPIClient(ASTRA_LIST_DB_APPLICATION_TOKEN);
+    const db1 = astraClient1.db(ASTRA_LIST_DB_ENDPOINT, {
+        namespace: ASTRA_LIST_DB_NAMESPACE,
+    });
+    const collection = db1.collection(ASTRA_LIST_DB_COLLECTION);
+
+    // All variables needed to connect to Astra DB and OpenAI API
+    const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
+    const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
+    const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
+
+    // Connect to Astra DB then the database
+    const astraClient2 = new DataAPIClient(ASTRA_DB_APPLICATION_TOKEN);
+    const db2 = astraClient2.db(ASTRA_DB_ENDPOINT, {
+        namespace: ASTRA_DB_NAMESPACE,
+    });
+};
+
+// Runs every 12 hours to keep DB active
+setInterval(keepDBAlive(), 60000 * 60 * 12);
 
 // Handle shutdown signals
 //process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
