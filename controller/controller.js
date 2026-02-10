@@ -37,15 +37,13 @@ export const query = async (req, res) => {
                 .json({ message: "RAG Bot does not exist.", success: false });
         }
 
-        chatHistory.push({ role: "user", content: req.body.query.toString() });
+        const chatHistory = req.body.chatHistory;
 
         const collectionName = req.body.collectionName;
 
         const ragbot = await getRagBotInfoByCollectionName(collectionName);
 
         const response = await OpenAIApiCallRAG(chatHistory, ragbot);
-
-        chatHistory.push(response);
 
         res.status(200).json({ message: response.content, success: true });
     } catch (error) {
@@ -287,7 +285,7 @@ export const addDataToRAGBot = async (req, res) => {
         const validLinks = await addDataToRagBot(
             collectionName,
             links,
-            processedFiles
+            processedFiles,
         );
         if (validLinks.length === 0 && processedFiles.length === 0) {
             return res.status(400).json({

@@ -69,10 +69,15 @@ const keepDBAlive = () => {
     const db1 = astraClient1.db(ASTRA_LIST_DB_ENDPOINT, {
         namespace: ASTRA_LIST_DB_NAMESPACE,
     });
-    const collection = db1.collection(ASTRA_LIST_DB_COLLECTION);
+    const collection1 = db1.collection(ASTRA_LIST_DB_COLLECTION);
+    collection1.findOne({
+        collectionName: "TEST",
+    });
+    console.log("LIST DB ACTIVE");
 
     // All variables needed to connect to Astra DB and OpenAI API
     const ASTRA_DB_NAMESPACE = process.env.ASTRA_DB_NAMESPACE;
+    const ASTRA_DB_COLLECTION = process.env.ASTRA_DB_COLLECTION;
     const ASTRA_DB_ENDPOINT = process.env.ASTRA_DB_ENDPOINT;
     const ASTRA_DB_APPLICATION_TOKEN = process.env.ASTRA_DB_APPLICATION_TOKEN;
 
@@ -81,6 +86,12 @@ const keepDBAlive = () => {
     const db2 = astraClient2.db(ASTRA_DB_ENDPOINT, {
         namespace: ASTRA_DB_NAMESPACE,
     });
+    const collection2 = db2.collection(ASTRA_DB_COLLECTION);
+    collection2.findOne({
+        collectionName: "TEST",
+    });
+
+    console.log("DATA DB ACTIVE");
 };
 
 // Runs every 12 hours to keep DB active
