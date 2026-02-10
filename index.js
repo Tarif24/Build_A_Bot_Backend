@@ -84,7 +84,7 @@ const keepDBAlive = () => {
 };
 
 // Runs every 12 hours to keep DB active
-setInterval(keepDBAlive(), 60000 * 60 * 12);
+setInterval(keepDBAlive, 60000 * 60 * 12);
 
 // Handle shutdown signals
 //process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
