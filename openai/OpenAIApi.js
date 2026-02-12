@@ -42,7 +42,7 @@ const CreateMessageTemplate = async (userMessage, ragbot) => {
                 sort: {
                     $vector: embedding.data[0].embedding,
                 },
-                limit: 10,
+                limit: 15,
             });
 
             const contextVectorsArray = await contextVectors.toArray();
