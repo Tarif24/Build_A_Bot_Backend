@@ -53,11 +53,14 @@
 
 [![Product Screen Shot][product-screenshot]][Live-Demo]
 
-This project is a website where the user can build their own RAG bot using chatgpt gpt-4o-mini as the base and then either upload websites or PDF files to give the chat bot more context it also gives the user a variety of options to customize the bots behavior and responses the their liking
+This project is a website where the user can build their own RAG bot using ChatGPT GPT-4o-mini as the base, and then either upload websites or PDF files to give the chatbot more context. It also gives the user a variety of options to customize the bot's behavior and responses to their liking
 
 About The Building Process:
 
-Building the backend for Build A Bot was not the greatest challenge of this project while building I did run into issues with integrating different packages some because of a lack of understanding and some because of version issues later were all solved with some time. The greatest hurdle I faced was project/file management and writing future proof code although the code part could though of as just a part of programming i put it in with project management because if i had a clear picture i could have seen a lot of the issues to come which would have saved me hours in rewriting the core code to fit something that i should have already have in mind. The next part tied to this hurdle was file management, I realized as the project grew it become more difficult to traverse files and find parts of the code that I needed easily also some files were just getting too long and out of hand. This caused me to take a day and rework the file structure to where it was more traversable and also split up files that were getting too long into more distinct roles. Overall the backend portion of this website has taught me not only a lot in a programming sense but also a lot in the development process as a whole.
+Building the backend for Build A Bot was not the greatest challenge of this project. While building, I did run into issues with integrating different packages, some because of a lack of understanding, and some because of version issues, which were all solved with time. The greatest hurdle I faced was project/file management and writing future proof code although the code part could though of as just a part of programming i put it in with project management because if i had a clear picture i could have seen a lot of the issues to come which would have saved me hours in rewriting the core code to fit something that i should have already have in mind. The next part tied to this hurdle was file management. I realized that as the project grew, it became more difficult to traverse files and find parts of the code that I needed easily, and some files were just getting too long and out of hand. This caused me to take a day and rework the file structure so that it was more traversable and also split up files that were getting too long into more distinct roles. Overall, the backend portion of this website has taught me not only a lot in a programming sense but also a lot in the development process as a whole.
+
+Core RAG flow:
+User sends a message as well as the chat history with their RAG bot selected -> Backend receives the request and then sends the request to the OpenAI handler -> In the handler, a message is built, the first part includes all of the customized bot behaviour data for the selected chat, the second part includes context data retrieved from the database with a vector search, and the last part is the users question -> then after the message is built it is sent to the OpenAI API along with the chat history -> after the response is sent to the user 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -69,7 +72,7 @@ These are all of the tools used for this project
 -   Express.JS
 -   AstraDB
 -   ChatGPT gpt-4o-mini API
--   Claude (Integrated claude into my development flow to improve efficiency and see different ways claude approached the problem which helped me start my train of thought)
+-   Claude (Integrated Claude into my development flow to improve efficiency and see different ways Claude approached the problem, which helped me start my train of thought)
 -   Docker
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -78,7 +81,7 @@ These are all of the tools used for this project
 
 These are all of the hosting services I used
 
--   Render: For the Node and Express application (Free)
+-   Railway: For the Node and Express application ($5/month)
 -   AstraDB: For the database (Free)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -87,7 +90,7 @@ These are all of the hosting services I used
 
 ## Getting Started
 
-This API allows you to save rag bot preferences and the pairing RAG data to a Astra database best to copy the repo and integrate with your own DB and version of chatgpt
+This API allows you to save RAG bot preferences and the pairing RAG data to an Astra database best to copy the repo and integrate with your own DB and version of chatgpt
 
 ### Prerequisites
 
@@ -109,8 +112,8 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 <br/>
 <br/>
 
--   To get all the RAG bots with the info the user added like behavior and tone
--   The Return will be an array of all the RAG bot collection the their attributes
+-   To get all the RAG bots with the info the user added, like behavior and tone
+-   The Return will be an array of all the RAG bot collection and their attributes
 
 ```sh
     https://rag-chat-bot-api.onrender.com/api/getAllRAGBotsInfo
@@ -131,7 +134,7 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 #### POST:
 
 -   To make a query to a specific bot
--   The query along with a collection name is needed
+-   The query, along with a collection name, is needed
 
 ```sh
     https://rag-chat-bot-api.onrender.com/api/query
@@ -140,7 +143,7 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 <br/>
 <br/>
 
--   Normal query to chatgpt without the RAG aspects
+-   Normal query to ChatGPT without the RAG aspects
 
 ```sh
     https://rag-chat-bot-api.onrender.com/api/queryNoRAG
@@ -150,7 +153,7 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 <br/>
 
 -   To build a bot and add some initial data
--   Needs to be sent as a form data add files with "pdf" and add the json Bot object with "json"
+-   Needs to be sent as form data, add files with "pdf" and add the JSON Bot object with "json."
 -   The structure for the object is down below
 
 ```sh
@@ -161,7 +164,7 @@ This API allows you to save rag bot preferences and the pairing RAG data to a As
 <br/>
 
 -   To get all the info of a given collection need the collection name
--   The return is the Bot object but with a "files" attribute too for all the files
+-   The return is the Bot object, but with a "files" attribute too for all the files
 -   Structure:
     <br/>
 
