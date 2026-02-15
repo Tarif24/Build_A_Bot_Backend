@@ -1,102 +1,82 @@
-<a id="readme-top"></a>
-
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Tarif24/Job_Listing_Website_React">
+  <a href="https://buildabot.tarifmohammad.com">
     <img src="assets/Chat_Bot_Icon.svg" alt="Logo" width="240" height="240">
   </a>
-
-  <h3 align="center">Build A Bot API</h3>
-
-  <p align="center">
-    A Rest API for my site build a bot which holds handles saving and deleting rag information
-    <br />
-    <br />
-    ALL LIVE LINKS ARE TO THE BUILD A BOT WEBSITE WHERE THE API IS USED
-    <br />
-    <br />
-    <br />
-    <a href="https://buildabot.tarifmohammad.com/">View Demo</a>
-    &middot;
-    <a href="https://github.com/Tarif24/Build_A_Bot_Backend/issues/new">Report Bug</a>
-  </p>
 </div>
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-        <li><a href="#hosted-with">Hosted With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#routes">Routes</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+# Build A Bot – Backend API
 
-<!-- ABOUT THE PROJECT -->
+Build A Bot is a Retrieval-Augmented Generation (RAG) chatbot builder that allows users to create, customize, and manage AI chatbots powered by their own data sources (PDFs and websites).
 
-## About The Project
+This repository contains the REST API responsible for bot configuration, data ingestion, embedding storage, and retrieval orchestration.
 
-[![Product Screen Shot][product-screenshot]][Live-Demo]
+---
 
-This project is a website where the user can build their own RAG bot using ChatGPT GPT-4o-mini as the base, and then either upload websites or PDF files to give the chatbot more context. It also gives the user a variety of options to customize the bot's behavior and responses to their liking
+## 🚀 Overview
 
-About The Building Process:
+The backend enables users to:
 
-Building the backend for Build A Bot was not the greatest challenge of this project. While building, I did run into issues with integrating different packages, some because of a lack of understanding, and some because of version issues, which were all solved with time. The greatest hurdle I faced was project/file management and writing future proof code although the code part could though of as just a part of programming i put it in with project management because if i had a clear picture i could have seen a lot of the issues to come which would have saved me hours in rewriting the core code to fit something that i should have already have in mind. The next part tied to this hurdle was file management. I realized that as the project grew, it became more difficult to traverse files and find parts of the code that I needed easily, and some files were just getting too long and out of hand. This caused me to take a day and rework the file structure so that it was more traversable and also split up files that were getting too long into more distinct roles. Overall, the backend portion of this website has taught me not only a lot in a programming sense but also a lot in the development process as a whole.
+- Create customizable RAG bots
+- Upload PDFs and ingest website content
+- Store vector embeddings in AstraDB
+- Perform similarity search for contextual retrieval
+- Query bots using a retrieval + generation pipeline
+- Manage multiple bots with distinct behavioral configurations
 
-Core RAG flow:
-User sends a message as well as the chat history with their RAG bot selected -> Backend receives the request and then sends the request to the OpenAI handler -> In the handler, a message is built, the first part includes all of the customized bot behaviour data for the selected chat, the second part includes context data retrieved from the database with a vector search, and the last part is the users question -> then after the message is built it is sent to the OpenAI API along with the chat history -> after the response is sent to the user 
+---
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## 🏗 Architecture Overview
 
-### Built With
+Build A Bot follows a standard RAG architecture:
 
-These are all of the tools used for this project
+1. User uploads PDFs or provides URLs
+2. Content is parsed and chunked
+3. Text is embedded
+4. Embeddings stored in AstraDB (vector database)
+5. User query is embedded
+6. Relevant chunks retrieved via vector similarity search
+7. Retrieved context injected into LLM prompt
+8. GPT generates final response
 
--   Node.JS
--   Express.JS
--   AstraDB
--   ChatGPT gpt-4o-mini API
--   Claude (Integrated Claude into my development flow to improve efficiency and see different ways Claude approached the problem, which helped me start my train of thought)
--   Docker
+This design separates knowledge retrieval from language generation, improving accuracy and contextual relevance.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+---
 
-### Hosted With
+## 🏗 Architecture Diagram
 
-These are all of the hosting services I used
+User<br>
+  ↓<br>
+React Frontend<br>
+  ↓ (REST API)<br>
+Express Server (Node.js)<br>
+  ↓<br>
+Bot Configuration Logic<br>
+  ↓<br>
+Content Ingestion Pipeline<br>
+  ├── PDF Parsing<br>
+  ├── Web Scraping<br>
+  ├── Text Chunking<br>
+  └── Embedding Generation<br>
+          ↓<br>
+      AstraDB (Vector Storage)<br>
+<br>
+Query Flow:<br>
+User Query<br>
+  ↓<br>
+Embed Query<br>
+  ↓<br>
+Vector Similarity Search (AstraDB)<br>
+  ↓<br>
+Context Injection<br>
+  ↓<br>
+LLM (GPT-4o-mini)<br>
+  ↓<br>
+Response<br>
 
--   Railway: For the Node and Express application ($5/month)
--   AstraDB: For the database (Free)
+---
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-This API allows you to save RAG bot preferences and the pairing RAG data to an Astra database best to copy the repo and integrate with your own DB and version of chatgpt
-
-### Prerequisites
-
--   No prerequisites at this time
-
-### Routes
+## 🧭 Routes
 
 #### GET:
 
@@ -164,7 +144,7 @@ This API allows you to save RAG bot preferences and the pairing RAG data to an A
 <br/>
 
 -   To get all the info of a given collection need the collection name
--   The return is the Bot object, but with a "files" attribute too for all the files
+-   The return is the Bot object, but with a "files" attribute too, for all the files
 -   Structure:
     <br/>
 
@@ -185,7 +165,7 @@ This API allows you to save RAG bot preferences and the pairing RAG data to an A
 
 -   To add more data to a given bot beyond the initial seed data
 -   The Return will be the success of the operation
--   Needs to be sent as a form data add files with "pdf" and add the json Bot object with "json"
+-   Needs to be sent as form data, add files with "pdf" and add the JSON Bot object with "json."
 -   Structure:
     <br/>
 
@@ -203,7 +183,7 @@ This API allows you to save RAG bot preferences and the pairing RAG data to an A
 <br/>
 <br/>
 
--   To edit the attributes of a existing Bot
+-   To edit the attributes of an existing Bot
 -   The Return will be the success of the operation
 -   Structure:
     <br/>
@@ -228,8 +208,8 @@ This API allows you to save RAG bot preferences and the pairing RAG data to an A
 
 #### DELETE:
 
--   To delete a RAG bot from the DB it deletes the attributes and the saved data
--   The Return will be if the job succeeded or not
+-   To delete a RAG bot from the DB, it deletes the attributes and the saved data
+-   The Return will be whether the job succeeded or not
 
 ```sh
     https://rag-chat-bot-api.onrender.com/api/deleteRAGBot
@@ -255,46 +235,78 @@ BOT OBJECT STRUCTURE:
 }
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+---
 
-<!-- USAGE EXAMPLES -->
+## 🛠 Tech Stack
 
-## Usage
+- Node.js
+- Express.js
+- AstraDB (vector database)
+- OpenAI GPT API (gpt-4o-mini)
+- PDF parsing
+- Web scraping utilities
+- Middleware for request handling
 
-The usage for this API would be if you ever need to create rag bots
+---
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+## 🔐 Bot Customization Model
 
-<!-- CONTACT -->
+Each bot includes configurable attributes:
 
-## Contact
+- Specialization
+- Tone
+- Audience
+- Unknown handling behavior
+- Response behavior rules
+
+These attributes are injected into the system prompt during generation.
+
+---
+
+## 📦 Key API Capabilities
+
+- Create RAG bot
+- Add additional data to existing bot
+- Query with RAG
+- Query without RAG
+- Edit bot attributes
+- Delete bot and associated data
+
+---
+
+## ⚖️ Design Decisions & Tradeoffs
+
+**Why AstraDB?**
+- Native vector search support
+- Simplified embedding storage
+- Managed infrastructure
+
+**Tradeoffs**
+- Write-heavy ingestion requires careful chunking strategy
+- Retrieval quality depends on embedding consistency
+- Single-instance deployment limits horizontal scaling
+
+Future scaling improvements could include:
+- Caching frequently queried embeddings
+- Distributed rate limiting
+- Horizontal API scaling
+
+---
+
+## 🌐 Deployment
+
+- Hosted API: Railway
+- Database: AstraDB (managed)
+
+---
+
+## 📬 Contact 
 
 Tarif Mohammad - [@GitHub](https://github.com/Tarif24) - [@Linkedin](https://www.linkedin.com/in/tarif-mohammad/) - Tarif24@hotmail.com
 
-Project Link: [https://github.com/Tarif24/Build_A_Bot_Backend](https://github.com/Tarif24/Build_A_Bot_Backend)
-
+Frontend Link: [https://github.com/Tarif24/Build_A_Bot_Frontend](https://github.com/Tarif24/Build_A_Bot_Frontend) </br>
 Live Link: [https://buildabot.tarifmohammad.com/][Live-Demo]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-This is a list of recourses that i found helpful and would like to give credit too
-
--   [Node.JS Documentation](https://nodejs.org/docs/latest/api/)
--   [Express Documentation](https://expressjs.com/)
--   [AstraDB Documentation](https://docs.datastax.com/en/astra-db-classic/index.html)
--   [Puppeteer Documentation](https://pptr.dev/)
--   [Langchain Documentation](https://python.langchain.com/docs/introduction/)
--   [Patch-Package Documentation](https://www.npmjs.com/package/patch-package)
--   [PDF-Parse Documentation](https://www.npmjs.com/package/pdf-parse)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [product-screenshot]: assets/readme_image.png
 [Live-Demo]: https://buildabot.tarifmohammad.com/
